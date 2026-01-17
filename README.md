@@ -52,3 +52,5 @@ npm run dev
 ~ Secure password hashing
 ~ Protected routes for cart and reviews
 
+# GitHub Repository Link
+https://github.com/kritikajain14/Elegance
