@@ -1,0 +1,582 @@
+@import "tailwindcss";
+
+:root {
+  --primary-50: #FFDBE8;
+  --primary-100: #FF94B2;
+  --primary-200: #F24455;
+  --primary-300: #E5203A;
+  --primary-400: #660F24;
+  --primary-500: #2B0013;
+}
+
+/* * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+} */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #FFDBE8 0%, #FF94B2 100%);
+  min-height: 100vh;
+  color: var(--primary-500);
+}
+
+/* Custom Glassmorphism Styles */
+.glass-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.glass-navbar {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-button {
+  background: rgba(242, 68, 85, 0.9);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.glass-button:hover {
+  background: rgba(229, 32, 58, 0.95);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(242, 68, 85, 0.4);
+}
+
+.glass-input {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.glass-input:focus {
+  outline: none;
+  border-color: rgba(242, 68, 85, 0.5);
+  box-shadow: 0 0 0 3px rgba(242, 68, 85, 0.1);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, var(--primary-200), var(--primary-300));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, var(--primary-300), var(--primary-400));
+}
+
+/* Text Selection */
+::selection {
+  background-color: rgba(242, 68, 85, 0.3);
+  color: var(--primary-500);
+}
+
+/* Smooth Image Loading */
+img {
+  transition: opacity 0.3s ease;
+}
+
+img[data-loaded="false"] {
+  opacity: 0;
+}
+
+img[data-loaded="true"] {
+  opacity: 1;
+}
+
+/* Loading Animation */
+.loading-spinner {
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top: 3px solid var(--primary-200);
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Floating Animation for Hero */
+.floating-element {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary-200), var(--primary-400));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 3D Card Effect */
+.card-3d {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.card-3d-inner {
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.card-3d:hover .card-3d-inner {
+  transform: rotateY(10deg) rotateX(5deg);
+}
+
+/* Soft Glow Effect */
+.soft-glow {
+  box-shadow: 0 0 60px rgba(242, 68, 85, 0.15);
+}
+
+/* Page Transition */
+.page-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.page-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 300ms, transform 300ms;
+}
+
+/* Add to index.css */
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.new-review {
+  animation: slideUp 0.5s ease-out;
+}
+
+/* Review Card Specific Styles */
+.review-card-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.review-card-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.review-card-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.review-card-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 300ms, transform 300ms;
+}
+
+/* Star rating hover effects */
+.star-rating .star {
+  transition: all 0.2s ease;
+}
+
+.star-rating .star:hover {
+  transform: scale(1.2);
+}
+
+/* Helpful buttons animation */
+.helpful-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.helpful-button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  border-radius: 100%;
+  transform: scale(1, 1) translate(-50%);
+  transform-origin: 50% 50%;
+}
+
+.helpful-button:focus:not(:active)::after {
+  animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(20, 20);
+    opacity: 0;
+  }
+}
+
+/* Review text gradient */
+.review-text-gradient {
+  background: linear-gradient(180deg, 
+    var(--primary-500) 0%, 
+    var(--primary-500) 60%, 
+    transparent 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Verified badge glow */
+.verified-badge {
+  box-shadow: 0 0 10px rgba(72, 187, 120, 0.3);
+}
+
+/* Review card hover effect */
+.review-card-hover {
+  transition: all 0.3s ease;
+}
+
+.review-card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Avatar gradient animation */
+.avatar-gradient {
+  background: linear-gradient(45deg, 
+    var(--primary-100), 
+    var(--primary-200), 
+    var(--primary-300)
+  );
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Loading shimmer effect for reviews */
+.review-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.1) 25%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.1) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Review action buttons pulse */
+@keyframes pulse-gentle {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.pulse-gentle {
+  animation: pulse-gentle 2s infinite;
+}
+
+/* Responsive adjustments for reviews */
+@media (max-width: 640px) {
+  .review-card-content {
+    flex-direction: column;
+  }
+  
+  .review-actions {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  
+  .review-helpful-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+/* Share Button Styles */
+.share-button-popup {
+  animation: slideUpFade 0.3s ease-out;
+}
+
+@keyframes slideUpFade {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Social Media Colors */
+.facebook-blue {
+  background-color: #1877F2;
+}
+
+.twitter-blue {
+  background-color: #1DA1F2;
+}
+
+.instagram-gradient {
+  background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+}
+
+.pinterest-red {
+  background-color: #E60023;
+}
+
+.whatsapp-green {
+  background-color: #25D366;
+}
+
+.email-gray {
+  background-color: #666666;
+}
+
+.copy-link {
+  background-color: var(--primary-200);
+}
+
+/* Share icon animations */
+.share-icon {
+  transition: all 0.3s ease;
+}
+
+.share-icon:hover {
+  transform: rotate(15deg) scale(1.1);
+}
+
+/* Share count bubble */
+.share-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: var(--primary-200);
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Share tooltip */
+.share-tooltip {
+  position: relative;
+}
+
+.share-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--primary-500);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  margin-bottom: 8px;
+}
+
+.share-tooltip::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--primary-500);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  margin-bottom: -5px;
+}
+
+.share-tooltip:hover::after,
+.share-tooltip:hover::before {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Share button wave effect */
+.share-button-wave {
+  position: relative;
+  overflow: hidden;
+}
+
+.share-button-wave::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  border-radius: 100%;
+  transform: scale(1, 1) translate(-50%);
+  transform-origin: 50% 50%;
+}
+
+.share-button-wave:focus:not(:active)::after {
+  animation: shareRipple 1s ease-out;
+}
+
+@keyframes shareRipple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(20, 20);
+    opacity: 0;
+  }
+}
+
+/* Share modal backdrop */
+.share-backdrop {
+  backdrop-filter: blur(5px);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Share button floating animation */
+@keyframes floatShare {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.floating-share {
+  animation: floatShare 3s ease-in-out infinite;
+}
+
+/* Social share counter */
+.share-counter {
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+}
+
+/* Responsive share buttons */
+@media (max-width: 640px) {
+  .share-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .share-options {
+    max-width: 90vw;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+/* Share button loading state */
+.share-loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.share-loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.2), 
+    transparent
+  );
+  animation: loadingShimmer 1.5s infinite;
+}
+
+@keyframes loadingShimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
