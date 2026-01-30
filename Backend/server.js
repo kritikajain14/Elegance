@@ -1,3 +1,4 @@
+import './config/env.js';
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
@@ -7,10 +8,18 @@ import productRoutes from './routes/productRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
+import wishlistRoutes from './routes/wishlistRoutes.js';
+import userProductRoutes from './routes/userProductRoutes.js';
+import userProfileRoutes from './routes/userProfileRoutes.js';
+import { cloudinary } from './utils/cloudinary.js';
 
-dotenv.config({ path: './.env' });
+
+
+// dotenv.config({ path: './.env' });
 
 const app = express()
+
+import paymentRoutes from './routes/paymentRoutes.js';
 
 // CORS configuration
 const corsOptions = {
@@ -28,25 +37,47 @@ mongoose.connect(process.env.MONGODB_URI)
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('MongoDB connection error:', err))
 
-// checking incoming requests
-// app.use((req, res, next) => {
-//   console.log('INCOMING:', req.method, req.originalUrl)
-//   next()
-// })
-
-
 // Routes
 app.use('/api/products', productRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/cart', cartRoutes);
+app.use('/api/wishlist', wishlistRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/user', userProductRoutes);
+app.use('/api/user', userProfileRoutes);
+
+// Serve uploaded files
+app.use('/uploads', express.static('uploads'));
 
 // Health check
 app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'OK', message: 'Perfume Shop API is running' });
 });
 
-const PORT = process.env.PORT || 3000;
+// .log('Cloudinarconsoley ENV:', {
+//   name: process.env.CLOUDINARY_CLOUD_NAME,
+//   key: process.env.CLOUDINARY_API_KEY ? 'OK' : 'MISSING',
+//   secret: process.env.CLOUDINARY_API_SECRET ? 'OK' : 'MISSING'
+// });
 
+// app.get('/cloudinary-test', async (req, res) => {
+//   try {
+//     console.log('File exists:', fs.existsSync('uploads/download.png'));
+
+//     const result = await cloudinary.uploader.upload(
+//       'uploads/download.png',
+//       { folder: 'debug-test' }
+//     );
+
+//     console.log('UPLOAD SUCCESS:', result.secure_url);
+//     res.json({ url: result.secure_url });
+//   } catch (err) {
+//     console.error('UPLOAD FAILED:', err);
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });

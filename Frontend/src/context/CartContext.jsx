@@ -126,7 +126,7 @@ useEffect(() => {
     clearCart,
     fetchCart
   }
-
+  
   return (
     <CartContext.Provider value={value}>
       {children}

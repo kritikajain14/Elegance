@@ -2,12 +2,24 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FiHeart, FiShoppingCart } from 'react-icons/fi'
 import { useCart } from '../context/CartContext'
+import { useWishlist } from '../context/WishlistContext'
 import toast from 'react-hot-toast'
 import ShareButton from './ShareButton'
+import { useState, useEffect } from 'react'
 
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart()
+  const { toggleWishlist, isInWishlist } = useWishlist()
+  const [isWishlisted, setIsWishlisted] = useState(false)
+  const [isWishlistLoading, setIsWishlistLoading] = useState(false)
+
+
+    useEffect(() => {
+    setIsWishlisted(isInWishlist(product._id))
+  }, [product._id, isInWishlist])
+
+
 
   const handleAddToCart = async (e) => {
     e.preventDefault()
@@ -16,6 +28,23 @@ const ProductCard = ({ product }) => {
       await addToCart(product._id, 1)
     } catch (error) {
       toast.error('Failed to add to cart')
+    }
+  }
+
+  const handleWishlistToggle = async (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
+    try {
+      setIsWishlistLoading(true)
+      const result = await toggleWishlist(product._id)
+      if (result.success) {
+        setIsWishlisted(!isWishlisted)
+      }
+    } catch (error) {
+      console.error('Error toggling wishlist:', error)
+    } finally {
+      setIsWishlistLoading(false)
     }
   }
 
@@ -68,6 +97,33 @@ const ProductCard = ({ product }) => {
           <button 
             onClick={handleAddToCart}
             className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-primary-100 hover:text-white transition-colors"
+          >
+            <FiShoppingCart className="w-5 h-5" />
+          </button>
+
+          {/* Wishlist Button */}
+          <button 
+            onClick={handleWishlistToggle}
+            disabled={isWishlistLoading}
+            className={`absolute top-4 right-4 p-2 rounded-full backdrop-blur-sm transition-all duration-300 ${
+              isWishlisted 
+                ? 'bg-red-500/90 text-white shadow-lg' 
+                : 'bg-white/80 text-primary-500 hover:bg-white hover:text-red-500'
+            } ${isWishlistLoading ? 'opacity-50' : ''}`}
+            title={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+          >
+            <motion.div
+              animate={isWishlisted ? { scale: [1, 1.2, 1] } : {}}
+              transition={{ duration: 0.3 }}
+            >
+              <FiHeart className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`} />
+            </motion.div>
+          </button>
+
+          {/* Add to Cart Button */}
+          <button 
+            onClick={handleAddToCart}
+            className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-primary-100 hover:text-white transition-all duration-300 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
           >
             <FiShoppingCart className="w-5 h-5" />
           </button>

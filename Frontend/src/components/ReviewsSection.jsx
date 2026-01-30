@@ -32,24 +32,48 @@ const ReviewsSection = ({ productId, productRating, reviewCount, onReviewAdded }
     }
   }
 
+
+  // const handleReviewAdded = async (newReview, updatedProduct) => {
+  //   // Add the new review to the beginning of the list
+  //   setReviews(prevReviews => [newReview, ...prevReviews])
+
+  // // Update average rating and total count
+  //   setAverageRating(updatedProduct.rating)
+  //   setTotalReviews(updatedProduct.reviewCount)
+    
+  //   // Notify parent component if needed
+  //   if (onReviewAdded) {
+  //     onReviewAdded(updatedProduct)
+  //   }
+    
+  //   // Refetch to get all reviews in correct order
+  //   setTimeout(() => {
+  //     fetchReviews()
+  //   }, 500)
+  // }
+
   const handleReviewAdded = async (newReview, updatedProduct) => {
-    // Add the new review to the beginning of the list
-    setReviews(prevReviews => [newReview, ...prevReviews])
-    
-    // Update average rating and total count
-    setAverageRating(updatedProduct.rating)
-    setTotalReviews(updatedProduct.reviewCount)
-    
-    // Notify parent component if needed
-    if (onReviewAdded) {
-      onReviewAdded(updatedProduct)
-    }
-    
-    // Refetch to get all reviews in correct order
-    setTimeout(() => {
-      fetchReviews()
-    }, 500)
+  if (!newReview) {
+    console.error("Review missing:", newReview);
+    return;
   }
+
+  setReviews(prev => [newReview, ...prev]);
+
+  // if (updatedProduct) {
+  //   setAverageRating(updatedProduct.rating ?? 0);
+  //   setTotalReviews(updatedProduct.reviewCount);
+
+  //   if (onReviewAdded) {
+  //     onReviewAdded(updatedProduct);
+  //   }
+  // } else {
+  //   console.warn("updatedProduct missing, refetching product");
+  // }
+
+  // Always refetch to stay consistent with backend
+  fetchReviews();
+};
 
   const handleReviewDeleted = (deletedReviewId) => {
     setReviews(prevReviews => prevReviews.filter(review => review._id !== deletedReviewId))

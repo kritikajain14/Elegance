@@ -6,6 +6,7 @@ import API from '../utils/api'
 import ReviewsSection from '../components/ReviewsSection'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
+import { useWishlist } from '../context/WishlistContext';
 import Loader from '../components/Loader'
 import ShareButton from '../components/ShareButton'
 import FloatingShareBar from '../components/FloatingShareBar'
@@ -22,10 +23,16 @@ const ProductDetails = () => {
   const [showShareOptions, setShowShareOptions] = useState(false)
   const { addToCart } = useCart()
   const { isAuthenticated } = useAuth()
+  const { toggleWishlist, isInWishlist } = useWishlist();
+  const [isWishlistLoading, setIsWishlistLoading] = useState(false);
 
   useEffect(() => {
     fetchProduct()
   }, [id])
+
+  useEffect(() => {
+  setIsWishlisted(isInWishlist(product?._id));
+}, [product?._id, isInWishlist]);
 
   const fetchProduct = async () => {
     try {
@@ -68,16 +75,6 @@ const ProductDetails = () => {
     }))
   }
 
-  const handleWishlist = () => {
-    if (!isAuthenticated) {
-      toast.error('Please login to add to wishlist')
-      navigate('/login')
-      return
-    }
-    setIsWishlisted(!isWishlisted)
-    toast.success(isWishlisted ? 'Removed from wishlist' : 'Added to wishlist!')
-  }
-
   const copyProductLink = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href)
@@ -93,11 +90,28 @@ const ProductDetails = () => {
   }
 
 
-  if (loading || !product) return <Loader />
+  if (loading) return <Loader />
+  if (!product) return null
 
   const discount = product.originalPrice > product.price
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0
+
+
+const handleWishlistToggle = async () => {
+  try {
+    setIsWishlistLoading(true);
+    const result = await toggleWishlist(product._id);
+    if (result.success) {
+      setIsWishlisted(!isWishlisted);
+    }
+  } catch (error) {
+    console.error('Error toggling wishlist:', error);
+  } finally {
+    setIsWishlistLoading(false);
+  }
+};
+
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -291,9 +305,21 @@ const ProductDetails = () => {
               <span>{product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}</span>
             </motion.button>
 
-            <button className="glass-card p-4 rounded-full hover:bg-primary-50 transition-colors">
-              <FiHeart className="w-6 h-6 text-primary-500" />
-            </button>
+            <button 
+  onClick={handleWishlistToggle}
+  disabled={isWishlistLoading}
+  className={`glass-card p-4 rounded-full hover:bg-primary-50 transition-all duration-300 ${
+    isWishlisted ? 'bg-red-50 text-red-500' : ''
+  } ${isWishlistLoading ? 'opacity-50' : ''}`}
+  title={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+>
+  <motion.div
+    animate={isWishlisted ? { scale: [1, 1.2, 1] } : {}}
+    transition={{ duration: 0.3 }}
+  >
+    <FiHeart className={`w-6 h-6 ${isWishlisted ? 'fill-current' : ''}`} />
+  </motion.div>
+</button>
           </div>
 
           {/* Stock Warning */}

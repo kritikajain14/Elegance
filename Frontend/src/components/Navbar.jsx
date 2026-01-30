@@ -1,18 +1,29 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { FiShoppingCart, FiUser, FiMenu, FiX } from 'react-icons/fi'
+import {
+  FiShoppingCart,
+  FiUser,
+  FiMenu,
+  FiHeart,
+  FiX,
+} from 'react-icons/fi'
 import { useAuth } from '../context/AuthContext'
 import { useCart } from '../context/CartContext'
+import { useWishlist } from '../context/WishlistContext'
 import { motion } from 'framer-motion'
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+
   const { user, logout } = useAuth()
   const { getCartCount } = useCart()
+  const { getWishlistCount } = useWishlist()
 
   const navLinks = [
     { path: '/', label: 'Home' },
     { path: '/products', label: 'Shop' },
+    
+    { path: '/dashboard', label: 'Sell' },
     { path: '/products?category=Men', label: 'Men' },
     { path: '/products?category=Women', label: 'Women' },
     { path: '/products?category=Unisex', label: 'Unisex' },
@@ -41,17 +52,51 @@ const Navbar = () => {
                 to={link.path}
                 className={({ isActive }) =>
                   `text-primary-500 hover:text-primary-300 font-medium transition-colors duration-300 ${
-                    isActive ? 'text-primary-300 border-b-2 border-primary-300' : ''
+                    isActive
+                      ? 'text-primary-300 border-b-2 border-primary-300'
+                      : ''
                   }`
                 }
               >
                 {link.label}
               </NavLink>
             ))}
+
+            {/* Wishlist Link (Desktop) */}
+            <NavLink
+              to="/wishlist"
+              className={({ isActive }) =>
+                `text-primary-500 hover:text-primary-300 font-medium transition-colors duration-300 flex items-center space-x-1 ${
+                  isActive
+                    ? 'text-primary-300 border-b-2 border-primary-300'
+                    : ''
+                }`
+              }
+            >
+              <FiHeart className="w-4 h-4" />
+              <span>Wishlist</span>
+            </NavLink>
           </div>
 
           {/* User Actions */}
           <div className="flex items-center space-x-6">
+            {/* Wishlist Icon */}
+            <Link to="/wishlist" className="relative">
+              <motion.div
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                className="text-primary-500 hover:text-primary-300 transition-colors"
+              >
+                <FiHeart className="w-6 h-6" />
+                {getWishlistCount() > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {getWishlistCount()}
+                  </span>
+                )}
+              </motion.div>
+            </Link>
+
+            {/* Cart Icon */}
             <Link to="/cart" className="relative">
               <motion.div
                 whileHover={{ scale: 1.1 }}
@@ -102,12 +147,16 @@ const Navbar = () => {
               </div>
             )}
 
-            {/* Mobile menu button */}
+            {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="md:hidden text-primary-500 hover:text-primary-300"
             >
-              {isMenuOpen ? <FiX className="w-6 h-6" /> : <FiMenu className="w-6 h-6" />}
+              {isMenuOpen ? (
+                <FiX className="w-6 h-6" />
+              ) : (
+                <FiMenu className="w-6 h-6" />
+              )}
             </button>
           </div>
         </div>
@@ -128,17 +177,38 @@ const Navbar = () => {
                   onClick={() => setIsMenuOpen(false)}
                   className={({ isActive }) =>
                     `text-primary-500 hover:text-primary-300 py-2 ${
-                      isActive ? 'text-primary-300 border-l-4 border-primary-300 pl-2' : ''
+                      isActive
+                        ? 'text-primary-300 border-l-4 border-primary-300 pl-2'
+                        : ''
                     }`
                   }
                 >
                   {link.label}
                 </NavLink>
               ))}
+
+              {/* Wishlist (Mobile) */}
+              <NavLink
+                to="/wishlist"
+                onClick={() => setIsMenuOpen(false)}
+                className={({ isActive }) =>
+                  `text-primary-500 hover:text-primary-300 py-2 flex items-center space-x-2 ${
+                    isActive
+                      ? 'text-primary-300 border-l-4 border-primary-300 pl-2'
+                      : ''
+                  }`
+                }
+              >
+                <FiHeart className="w-4 h-4" />
+                <span>Wishlist</span>
+              </NavLink>
+
               <div className="pt-4 border-t border-white/20">
                 {user ? (
                   <>
-                    <div className="text-primary-500 py-2">Hi, {user.name}</div>
+                    <div className="text-primary-500 py-2">
+                      Hi, {user.name}
+                    </div>
                     <button
                       onClick={() => {
                         logout()
@@ -151,12 +221,18 @@ const Navbar = () => {
                   </>
                 ) : (
                   <>
-                    <Link to="/login" onClick={() => setIsMenuOpen(false)}>
+                    <Link
+                      to="/login"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
                       <button className="w-full py-2 text-primary-500 hover:text-primary-300">
                         Login
                       </button>
                     </Link>
-                    <Link to="/register" onClick={() => setIsMenuOpen(false)}>
+                    <Link
+                      to="/register"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
                       <button className="glass-button w-full py-2 rounded-lg text-white font-medium mt-2">
                         Register
                       </button>
@@ -172,4 +248,4 @@ const Navbar = () => {
   )
 }
 
-export default Navbar                                   
+export default Navbar

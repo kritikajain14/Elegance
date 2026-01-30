@@ -4,7 +4,7 @@ import User from '../models/User.js';
 
 const protect = asyncHandler(async (req, res, next) => {
 
-  console.log('AUTH HEADER:', req.headers.authorization);
+  // console.log('AUTH HEADER:', req.headers.authorization);
   let token;
 
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
@@ -12,18 +12,28 @@ const protect = asyncHandler(async (req, res, next) => {
       token = req.headers.authorization.split(' ')[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = await User.findById(decoded.id).select('-password');
-      return next();
+
+    
+
+      next();
     } catch (error) {
-      console.error(error);
+      console.error('JWT ERROR:', error.message);
       res.status(401);
       throw new Error('Not authorized, token failed');
     }
-  }
-
-  if (!token) {
+  } else {
     res.status(401);
     throw new Error('Not authorized, no token');
   }
 });
 
-export { protect };
+const admin = (req, res, next) => {
+  if (req.user && req.user.role === 'admin') {
+    next(); // user is admin, allow access
+  } else {
+    res.status(403);
+    throw new Error('Not authorized as admin');
+  }
+};
+
+export { protect, admin };

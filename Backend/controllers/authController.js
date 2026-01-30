@@ -13,7 +13,7 @@ const generateToken = (id) => {
 // @route   POST /api/auth/register
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password  } = req.body;
 
   // Check if user exists
   const userExists = await User.findOne({ email });
@@ -33,7 +33,7 @@ const registerUser = asyncHandler(async (req, res) => {
     res.status(201).json({
       _id: user._id,
       name: user.name,
-      email: user.email,
+      email: user.email, 
       token: generateToken(user._id)
     });
   } else {
@@ -41,6 +41,7 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error('Invalid user data');
   }
 });
+
 
 // @desc    Login user
 // @route   POST /api/auth/login
@@ -55,7 +56,7 @@ const loginUser = asyncHandler(async (req, res) => {
     res.json({
       _id: user._id,
       name: user.name,
-      email: user.email,
+      email: user.email, 
       token: generateToken(user._id)
     });
   } else {
@@ -63,5 +64,7 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new Error('Invalid email or password');
   }
 });
+
+
 
 export { registerUser, loginUser };

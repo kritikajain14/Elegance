@@ -32,19 +32,75 @@ const getProducts = asyncHandler(async (req, res) => {
   res.json(products);
 });
 
+
 // @desc    Get single product
 // @route   GET /api/products/:productId
 // @access  Public
+
 const getProductById = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.productId);
-  
-  if (product) {
-    res.json(product);
-  } else {
-    res.status(404);
-    throw new Error('Product not found');
+  const product = await Product.findByIdAndUpdate(
+    req.params.productId,
+    { $inc: { views: 1 } },
+    { new: true }
+  ).populate('seller', 'name email');
+
+  if (!product) {
+    return res.status(404).json({ message: 'Product not found' });
   }
+
+  res.json(product);
 });
+
+
+
+// @desc    Search products
+// @route   GET /api/products/search
+// @access  Public
+const searchProducts = asyncHandler(async (req, res) => {
+  const { q, category, minPrice, maxPrice, page = 1, limit = 12 } = req.query;
+  
+  let query = {
+    status: 'approved',
+    isApproved: true,
+    stock: { $gt: 0 }
+  };
+  
+  if (q) {
+    query.$or = [
+      { name: { $regex: q, $options: 'i' } },
+      { description: { $regex: q, $options: 'i' } },
+      { brand: { $regex: q, $options: 'i' } },
+      { 'notes': { $regex: q, $options: 'i' } }
+    ];
+  }
+  
+  if (category) {
+    query.category = category;
+  }
+  
+  if (minPrice || maxPrice) {
+    query.price = {};
+    if (minPrice) query.price.$gte = parseFloat(minPrice);
+    if (maxPrice) query.price.$lte = parseFloat(maxPrice);
+  }
+  
+  const products = await Product.find(query)
+    .populate('seller', 'name')
+    .sort({ createdAt: -1 })
+    .limit(limit * 1)
+    .skip((page - 1) * limit);
+  
+  const total = await Product.countDocuments(query);
+  
+  res.json({
+    products,
+    totalPages: Math.ceil(total / limit),
+    currentPage: page,
+    totalProducts: total,
+    searchQuery: q
+  });
+});  
+
 
 // @desc    Get new arrivals
 // @route   GET /api/products/new-arrivals
@@ -66,5 +122,6 @@ export {
   getProducts,
   getProductById,
   getNewArrivals,
-  getPopularProducts
+  getPopularProducts, 
+  searchProducts
 };

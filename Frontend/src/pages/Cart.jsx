@@ -192,16 +192,18 @@ const Cart = () => {
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  <Link to="/products">
-                    <button className="w-full glass-card py-3 rounded-lg text-primary-500 font-medium hover:bg-white/20 transition-colors">
-                      Continue Shopping
-                    </button>
-                  </Link>
-                  <button className="w-full glass-button mt-4 py-3 rounded-lg text-white font-semibold text-lg">
-                    Proceed to Checkout
-                  </button>
-                </div>
+                <div className="flex flex-col gap-4">
+  <Link to="/products">
+    <button className="w-full glass-card py-3 rounded-lg text-primary-500 font-medium hover:bg-white/20 transition-colors">
+      Continue Shopping
+    </button>
+  </Link>
+  <Link to="/checkout">
+    <button className="w-full glass-button py-3 rounded-lg text-white font-semibold text-lg">
+      Proceed to Checkout
+    </button>
+  </Link>
+</div>
 
                 {/* Promo Code */}
                 <div className="mt-6 pt-6 border-t border-white/20">
