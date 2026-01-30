@@ -54,29 +54,6 @@ app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'OK', message: 'Perfume Shop API is running' });
 });
 
-// .log('Cloudinarconsoley ENV:', {
-//   name: process.env.CLOUDINARY_CLOUD_NAME,
-//   key: process.env.CLOUDINARY_API_KEY ? 'OK' : 'MISSING',
-//   secret: process.env.CLOUDINARY_API_SECRET ? 'OK' : 'MISSING'
-// });
-
-// app.get('/cloudinary-test', async (req, res) => {
-//   try {
-//     console.log('File exists:', fs.existsSync('uploads/download.png'));
-
-//     const result = await cloudinary.uploader.upload(
-//       'uploads/download.png',
-//       { folder: 'debug-test' }
-//     );
-
-//     console.log('UPLOAD SUCCESS:', result.secure_url);
-//     res.json({ url: result.secure_url });
-//   } catch (err) {
-//     console.error('UPLOAD FAILED:', err);
-//     res.status(500).json({ error: err.message });
-//   }
-// });
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
