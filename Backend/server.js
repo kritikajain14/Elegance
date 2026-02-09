@@ -48,6 +48,8 @@ app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/user', userProductRoutes);
 app.use('/api/user', userProfileRoutes);
+app.use("/images", express.static("public/images"));
+
 
 // Serve uploaded files
 app.use('/uploads', express.static('uploads'));
