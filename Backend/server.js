@@ -24,7 +24,8 @@ import paymentRoutes from './routes/paymentRoutes.js';
 // CORS configuration
 const corsOptions = {
   origin:
-  "https://elegance-pink.vercel.app/", 
+  "https://elegance-pink.vercel.app", 
+  methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
   optionsSuccessStatus: 200
 };
@@ -48,7 +49,7 @@ app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/user', userProductRoutes);
 app.use('/api/user', userProfileRoutes);
-app.use("/images", express.static("public/images"));
+
 
 
 // Serve uploaded files
