@@ -25,7 +25,7 @@ import paymentRoutes from './routes/paymentRoutes.js';
 const corsOptions = {
   origin:
   ["https://elegance-pink.vercel.app/", 
-  "http://localhost:5173"],
+  ],
 
   credentials: true,
   optionsSuccessStatus: 200
